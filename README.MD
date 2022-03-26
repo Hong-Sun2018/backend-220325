@@ -15,3 +15,17 @@ django-admin startproject PROJECT_NAME . -- create project under current folder
 python manage.py runserver [PORT_NUMBER] -- run dev server
 
 python manage.py startapp APP_NAME -- create a new app
+
+# Select Virtual Environment Python Interpreter (Windows)
+
+py -3 -m venv .venv
+
+.venv\scripts\activate
+
+View > Command Palette > Python: Select Interpreter
+
+# Database Migaration
+
+python manage.py makemigrations
+
+python manage.py migrate

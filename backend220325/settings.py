@@ -36,7 +36,11 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'user'
+    'user',
+    'products',
+    'sales',
+    'stores',
+    
 ]
 
 MIDDLEWARE = [
@@ -75,8 +79,13 @@ WSGI_APPLICATION = 'backend220325.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'dataset',
+        'USER': 'root',
+        'PASSWORD': '123123',
+        'HOST': 'localhost',
+        'PORT': '3306',
+
     }
 }
 
