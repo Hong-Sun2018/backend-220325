@@ -36,11 +36,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'user',
     'products',
     'sales',
     'stores',
-    
+    'control',
 ]
 
 MIDDLEWARE = [
@@ -85,7 +86,6 @@ DATABASES = {
         'PASSWORD': '123123',
         'HOST': 'localhost',
         'PORT': '3306',
-
     }
 }
 
