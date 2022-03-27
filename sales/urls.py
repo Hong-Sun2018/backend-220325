@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
   path('test/', views.test),
-  path('clear', views.clear),
-  path('read', views.read_file),
-  
+  path('clear/', views.clear),
+  path('read-from-file/', views.read_file),
+  path('get-total-num-mysql/',views.get_total_num_mysql)
 ]

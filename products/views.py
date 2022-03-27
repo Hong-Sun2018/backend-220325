@@ -9,6 +9,7 @@ import csv
 # from google.cloud.bigquery import Client
 from google.cloud import bigquery
 from google.oauth2 import service_account
+from user.views import verify_session
 
 # Create your views here.
 
@@ -40,7 +41,7 @@ def test(request, *args, **kwargs):
   return Response({"msg": "test success"})
 
 # import CSV to database
-@api_view(["GET"])
+@api_view(["POST"])
 def read_products(request, *args, **kwargs): 
 
   # if database is not empty, skip import
@@ -75,12 +76,21 @@ def read_products(request, *args, **kwargs):
     return Response(res_data)
 
 # delete all products
-@api_view(["GET"])
-def clear(req, *data, **options):
+@api_view(["DELETE"])
+def clear(req):
   start_time = timezone.now()
   if Product.objects.count() > 0:
     Product.objects.all().delete()
   total_time = timezone.now() - start_time
   return Response({"msg": "cleared product database.", "total-time": total_time})
 
+@api_view(["GET"])
+def get_total_num_mysql(req):
+  session = req.COOKIES.get('session_id')
+  if verify_session(session) == False:
+    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
 
+  count = Product.objects.all().count()
+  return Response({'count': count})
+
+  

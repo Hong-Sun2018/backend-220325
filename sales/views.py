@@ -5,6 +5,7 @@ from rest_framework.decorators import api_view
 from control.views import read_control, update_control
 import csv
 from django.utils import timezone
+from user.views import verify_session
 
 
 # Create your views here.
@@ -13,8 +14,8 @@ def test(req, *args, **kwargs):
   return Response({"msg":"test success"})
 
 # Read data from CSV
-@api_view(["GET"])
-def read_file(req, *args, **kwargs):
+@api_view(["POST"])
+def read_file(req):
     control = read_control()
     if Sale.objects.count() > 0:   # if data exists, return not modified
       return Response({"msg": "sales already exist in database."}, status=status.HTTP_304_NOT_MODIFIED)
@@ -60,17 +61,22 @@ def read_file(req, *args, **kwargs):
         return Response({
           "total-time": control.time_read_sale, 
           "msg": "read sales from CSV file"
-        })
- 
-
-    
-    
+        })    
 
 # clear data in sales
-@api_view(["GET"])
-def clear(req, *args, **kwargs):
+@api_view(["DELETE"])
+def clear(req):
   Sale.objects.all().delete()
   return Response({
     "msg": "sales cleared."
   })
+
+@api_view(["GET"])
+def get_total_num_mysql(req):
+  session = req.COOKIES.get('session_id')
+  if verify_session(session) == False:
+    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
+
+  count = Sale.objects.all().count()
+  return Response({'count': count})
 

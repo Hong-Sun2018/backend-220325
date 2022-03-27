@@ -111,3 +111,21 @@ def signout(req):
     secure = True,
   )
   return response
+
+def verify_session(session):
+
+  # no session or invalid length, verify failed
+  if session == None:
+    return False
+  elif len(session) < 33: 
+    return False
+  
+  # if can not find user by session_id, verify failed
+  users = User.objects.filter(session_id = session).all()
+  if len(users) != 1:
+    return False
+  # if the only user found by session_id is not admin, verify failed  
+  elif users[0].is_admin == False:
+    return False
+  else:
+    return True
