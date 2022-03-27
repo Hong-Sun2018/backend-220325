@@ -2,11 +2,12 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+from google.cloud.bigquery import Client
 
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'backend220325.settings')
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'C:\auth\auth.json'
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

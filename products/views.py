@@ -5,11 +5,38 @@ from rest_framework.decorators import api_view
 from products.models import Product
 from django.utils import timezone
 import csv
+# import os
+# from google.cloud.bigquery import Client
+from google.cloud import bigquery
+from google.oauth2 import service_account
 
 # Create your views here.
 
 @api_view(["GET"])
 def test(request, *args, **kwargs):
+  key_path = "c:\\auth\\auth.json"
+
+  credentials = service_account.Credentials.from_service_account_file(
+    key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
+  )
+
+  client = bigquery.Client(credentials=credentials, project=credentials.project_id,)
+  query_string = """
+    SELECT * FROM `my-city-charge.dataset_20220327.products` LIMIT 100
+  """
+
+  dataframe = (
+    client.query(query_string)
+      .result()
+      .to_dataframe(
+        # Optionally, explicitly request to use the BigQuery Storage API. As of
+        # google-cloud-bigquery version 1.26.0 and above, the BigQuery Storage
+        # API is used by default.
+        # create_bqstorage_client=True,
+      )
+  )
+
+  print(dataframe)
   return Response({"msg": "test success"})
 
 # import CSV to database
@@ -55,4 +82,5 @@ def clear(req, *data, **options):
     Product.objects.all().delete()
   total_time = timezone.now() - start_time
   return Response({"msg": "cleared product database.", "total-time": total_time})
+
 

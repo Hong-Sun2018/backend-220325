@@ -8,6 +8,7 @@ django = "*"
 django-cors-headers = "*"
 djangorestframework = "*"
 mysqlclient = "*"
+google-cloud-bigquery = {extras = ["bqstorage", "pandas"], version = "*"}
 
 [dev-packages]
 
