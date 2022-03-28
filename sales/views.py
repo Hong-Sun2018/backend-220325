@@ -78,9 +78,9 @@ def get_sale_list(req):
     ON store_table.store_id = sale_table.store_id
     INNER JOIN `dataset_20220327.products` as product_table
     ON sale_table.product_id = product_table.product_id
-    WHERE store_table.city_id = 'C013'
-    AND sale_table.date >= DATE('2018-01-01')
-    AND sale_table.date <= DATE('2018-12-31')
+    WHERE store_table.city_id = '{city_id}'
+    AND sale_table.date >= DATE('{start_date}')
+    AND sale_table.date <= DATE('{end_date}')
     ORDER BY sale_table.sales
     LIMIT 100;
   """
