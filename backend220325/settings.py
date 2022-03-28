@@ -62,6 +62,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3012',
+    'https://data.h0n9.com',
 ]
 
 CORS_ALLOW_METHODS = [

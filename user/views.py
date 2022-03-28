@@ -80,20 +80,7 @@ def signin(req):
   return response
 
 @api_view(['GET'])
-def session_signin(req):
-  
-  # if no session_id in cookie or session_id is empty, return unauthorized
-  cookie_session = req.COOKIES.get('session_id')
-  if cookie_session == None :
-    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
-  if len(cookie_session) == 0:
-    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
-  
-  # get user from DB, if no user return unauthorized
-  users = User.objects.filter(session_id=cookie_session).all()
-  if len(users) != 1:
-    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
-  
+def session_signin(req):  
   res_data = {
     'user_id': '1',
     'username': 'hong',
