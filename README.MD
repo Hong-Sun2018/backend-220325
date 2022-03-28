@@ -2,6 +2,14 @@
 
 Django
 
+Django rest_framework
+
+MySQL
+
+Big Qurey
+
+Package Management: pipenv
+
 # Commands
 
 pip3 install pipenv -- install python package management tool
