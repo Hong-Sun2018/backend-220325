@@ -6,8 +6,23 @@ from control.views import read_control, update_control
 import csv
 from django.utils import timezone
 from user.views import verify_session
+from products.views import big_query
 
 # Create your views here.
+
+@api_view(['GET'])
+def get_cities(req):
+  session = req.COOKIES.get('session_id')
+  if verify_session(session) == False:
+    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
+  
+  query_str = """
+    SELECT DISTINCT city_id 
+    FROM `my-city-charge.dataset_20220327.stores`
+    ORDER BY city_id
+  """
+  result = big_query(query_str)
+  return Response({'result': result})
 
 # Create your views here.
 @api_view(["GET"])
@@ -17,6 +32,9 @@ def test(req, *args, **kwargs):
 # Read data from CSV
 @api_view(["POST"])
 def read_file(req):
+    session = req.COOKIES.get('session_id')
+    if verify_session(session) == False:
+      return Response({}, status=status.HTTP_401_UNAUTHORIZED)
     control = read_control()
     if Store.objects.count() > 0:   # if data exists, return not modified
       return Response({"msg": "sales already exist in database."}, status=status.HTTP_304_NOT_MODIFIED)
@@ -59,6 +77,9 @@ def read_file(req):
 # clear data in sales
 @api_view(["DELETE"])
 def clear(req):
+  session = req.COOKIES.get('session_id')
+  if verify_session(session) == False:
+    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
   Store.objects.all().delete()
   return Response({
     "msg": "stores cleared."

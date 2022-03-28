@@ -10,35 +10,54 @@ import csv
 from google.cloud import bigquery
 from google.oauth2 import service_account
 from user.views import verify_session
+import pandas
 
 # Create your views here.
 
-@api_view(["GET"])
-def test(request, *args, **kwargs):
-  key_path = "c:\\auth\\auth.json"
-
+######################################### Big Query ################################
+def big_query(query_str):
+  key_path = 'c:\\auth\\auth.json'
   credentials = service_account.Credentials.from_service_account_file(
     key_path, scopes=["https://www.googleapis.com/auth/cloud-platform"],
   )
-
   client = bigquery.Client(credentials=credentials, project=credentials.project_id,)
+
+  dataframe = (
+    client.query(query_str)
+      .result()
+      .to_dataframe()
+  )
+  list = dataframe.values.tolist()
+  return list
+
+# test
+@api_view(["GET"])
+def test(request, *args, **kwargs):
   query_string = """
     SELECT * FROM `my-city-charge.dataset_20220327.products` LIMIT 100
   """
 
-  dataframe = (
-    client.query(query_string)
-      .result()
-      .to_dataframe(
-        # Optionally, explicitly request to use the BigQuery Storage API. As of
-        # google-cloud-bigquery version 1.26.0 and above, the BigQuery Storage
-        # API is used by default.
-        # create_bqstorage_client=True,
-      )
-  )
+  dataframe = big_query(query_string)
 
   print(dataframe)
-  return Response({"msg": "test success"})
+  return Response({"msg": "test success", 'result': dataframe})
+
+# get all hierarchy1
+@api_view(['GET'])
+def get_all_hierarchy1(req):
+  
+  session = req.COOKIES.get('session_id')
+  if verify_session(session) == False:
+    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
+  
+  query_str = """
+    SELECT DISTINCT  hierarchy1_id FROM `my-city-charge.dataset_20220327.products`
+  """
+  list = big_query(query_str)
+  return Response({"msg": "query success", 'result': list})
+
+
+########################################## MySQL ###########################################
 
 # import CSV to database
 @api_view(["POST"])

@@ -7,4 +7,5 @@ urlpatterns = [
   path("test/", views.test),
   path("clear/", views.clear),
   path("get-total-num-mysql/",views.get_total_num_mysql),
+  path('get-h1-list/', views.get_all_hierarchy1),
 ]
