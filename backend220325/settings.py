@@ -61,9 +61,9 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3012',
     'http://127.0.0.1:3012',
-    'http://83.250.72.94',
     'http://sunhongra@dynamic-dns.net',
     'https://h0n9.com',
+    'http://0.0.0.0:3012'
 ]
 
 CORS_ALLOW_METHODS = [
