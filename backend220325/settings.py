@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-m)a)zi35a@2n91a9=zqyah)9%w#=)#ex&nx--uogd!k7s@_28@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'sunhongra.dynamic-dns.net',
+]
 
 
 # Application definition
@@ -60,10 +62,6 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3012',
-    'http://127.0.0.1:3012',
-    'http://sunhongra@dynamic-dns.net',
-    'https://h0n9.com',
-    'http://0.0.0.0:3012'
 ]
 
 CORS_ALLOW_METHODS = [
