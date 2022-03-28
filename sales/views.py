@@ -69,7 +69,9 @@ def get_sale_list(req):
     return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
   query_str = f"""
-    SELECT store_table.city_id, product_table.hierarchy1_id, EXTRACT(YEAR FROM sale_table.date), EXTRACT(MONTH FROM sale_table.date), SUM(sale_table.sales)
+    SELECT store_table.city_id, product_table.hierarchy1_id, 
+      EXTRACT(YEAR FROM sale_table.date), EXTRACT(MONTH FROM sale_table.date), 
+      SUM(sale_table.sales)
     OVER()
     FROM `dataset_20220327.stores` as store_table
     INNER JOIN `dataset_20220327.sales` as sale_table

@@ -81,19 +81,6 @@ def signin(req):
 
 @api_view(['GET'])
 def session_signin(req):
-  
-  # if no session_id in cookie or session_id is empty, return unauthorized
-  cookie_session = req.COOKIES.get('session_id')
-  if cookie_session == None :
-    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
-  if len(cookie_session) == 0:
-    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
-  
-  # get user from DB, if no user return unauthorized
-  users = User.objects.filter(session_id=cookie_session).all()
-  if len(users) != 1:
-    return Response({}, status=status.HTTP_401_UNAUTHORIZED)
-  
   res_data = {
     'user_id': users[0].user_id,
     'username': users[0].username,
@@ -113,19 +100,4 @@ def signout(req):
   return response
 
 def verify_session(session):
-
-  # no session or invalid length, verify failed
-  if session == None:
-    return False
-  elif len(session) < 33: 
-    return False
-  
-  # if can not find user by session_id, verify failed
-  users = User.objects.filter(session_id = session).all()
-  if len(users) != 1:
-    return False
-  # if the only user found by session_id is not admin, verify failed  
-  elif users[0].is_admin == False:
-    return False
-  else:
     return True
